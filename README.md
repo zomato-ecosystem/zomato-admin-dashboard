@@ -1,37 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📊 Zomato Admin Dashboard
 
-## Getting Started
+The central command center for the Zomato Ecosystem. Built with Next.js 14 for speed and scalability.
 
-First, run the development server:
+## ✨ Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **User Management**: View and ban/unban customers, drivers, and restaurant owners.
+- **Restaurant Approval**: Verify and onboard new restaurant partners.
+- **Financials**: Process payouts, view commission reports, and handle refunds.
+- **Content Management**: Update banners, verified badges, and promoted listings.
+- **Analytics**: Comprehensive charts for orders, revenue, and active users.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Framework**: Next.js 14 (App Router)
+- **Styling**: Tailwind CSS, Shadcn/UI
+- **Data Fetching**: React Query
+- **Charts**: Recharts
+- **Forms**: React Hook Form + Zod
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🚀 Getting Started
 
-## Learn More
+### Prerequisites
 
-To learn more about Next.js, take a look at the following resources:
+- Node.js 18+
+- Backend API running locally or remotely
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Installation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1.  **Navigate to the app directory**
+    ```bash
+    cd apps/zomato-admin-dashboard
+    ```
 
-## Deploy on Vercel
+2.  **Install dependencies**
+    ```bash
+    npm install
+    ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3.  **Start the development server**
+    ```bash
+    npm run dev
+    ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# zomato-admin-dashboard
+4.  **Access the Dashboard**
+    Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## 👨‍💻 Author
+
+**Arsh Verma** - *Full Stack Developer*
+
+Connect with me:
+
+- 🐙 **GitHub**: [ArshVermaGit](https://github.com/ArshVermaGit)
+- 💼 **LinkedIn**: [arshvermadev](https://www.linkedin.com/in/arshvermadev/)
+- ✖️ **X (Twitter)**: [@TheArshVerma](https://x.com/TheArshVerma)
+- 📧 **Email**: [Arshvermadev@gmail.com](mailto:Arshvermadev@gmail.com)
+
+---
+
+Made with ❤️ by ArshCreates
