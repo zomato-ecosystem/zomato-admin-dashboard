@@ -1,4 +1,4 @@
-import apiClient from '@/lib/apiClient';
+import { apiClient, OrderService as ApiOrderService } from '@zomato/api-client';
 
 export interface OrderFilters {
     status?: string;
