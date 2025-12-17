@@ -1,27 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MoreHorizontal, Search, PlusCircle, Filter } from "lucide-react";
 import { mockRestaurants } from '@/lib/mock-data';
 import Link from 'next/link';
+import { RestaurantsTable } from '@/components/restaurants/RestaurantsTable';
 
 export default function RestaurantsPage() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -31,14 +17,8 @@ export default function RestaurantsPage() {
         res.location.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const getStatusVariant = (status: string) => {
-        switch (status) {
-            case 'Active': return 'success';
-            case 'Pending': return 'warning';
-            case 'Suspended': return 'destructive';
-            default: return 'secondary';
-        }
-    };
+    const activeRestaurants = filteredRestaurants.filter(r => r.status === 'Active');
+    const pendingRestaurants = filteredRestaurants.filter(r => r.status === 'Pending');
 
     return (
         <div className="space-y-6">
@@ -61,72 +41,37 @@ export default function RestaurantsPage() {
                 </div>
             </div>
 
-            <div className="flex items-center py-4">
-                <div className="relative w-full max-w-sm">
-                    <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input
-                        placeholder="Search restaurants..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-8"
-                    />
-                </div>
-            </div>
+            <Tabs defaultValue="all" className="space-y-4">
+                <TabsList>
+                    <TabsTrigger value="all">All Restaurants</TabsTrigger>
+                    <TabsTrigger value="active">Active</TabsTrigger>
+                    <TabsTrigger value="pending">Pending Approvals <span className="ml-2 bg-red-100 text-red-600 px-2 py-0.5 rounded-full text-xs font-bold">{pendingRestaurants.length}</span></TabsTrigger>
+                </TabsList>
 
-            <div className="rounded-md border bg-card">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Name</TableHead>
-                            <TableHead>Location</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Rating</TableHead>
-                            <TableHead>Revenue</TableHead>
-                            <TableHead>Active Since</TableHead>
-                            <TableHead className="text-right">Actions</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {filteredRestaurants.map((res) => (
-                            <TableRow key={res.id}>
-                                <TableCell className="font-medium">
-                                    <div className="flex flex-col">
-                                        <Link href={`/restaurants/${res.id}`} className="hover:underline text-primary">
-                                            {res.name}
-                                        </Link>
-                                        <span className="text-xs text-muted-foreground">{res.cuisine.join(', ')}</span>
-                                    </div>
-                                </TableCell>
-                                <TableCell>{res.location}</TableCell>
-                                <TableCell>
-                                    <Badge variant={getStatusVariant(res.status) as any}>{res.status}</Badge>
-                                </TableCell>
-                                <TableCell>{res.rating > 0 ? res.rating : 'N/A'}</TableCell>
-                                <TableCell>₹{res.revenue.toLocaleString()}</TableCell>
-                                <TableCell>{res.activeSince}</TableCell>
-                                <TableCell className="text-right">
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                                <span className="sr-only">Open menu</span>
-                                                <MoreHorizontal className="h-4 w-4" />
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end">
-                                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                            <DropdownMenuItem>
-                                                <Link href={`/restaurants/${res.id}`} className="w-full">View Details</Link>
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem>View Menu</DropdownMenuItem>
-                                            <DropdownMenuItem className="text-destructive">Suspend</DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </div>
+                <div className="flex items-center py-4">
+                    <div className="relative w-full max-w-sm">
+                        <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                        <Input
+                            placeholder="Search restaurants..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="pl-8"
+                        />
+                    </div>
+                </div>
+
+                <TabsContent value="all" className="space-y-4">
+                    <RestaurantsTable restaurants={filteredRestaurants} />
+                </TabsContent>
+
+                <TabsContent value="active" className="space-y-4">
+                    <RestaurantsTable restaurants={activeRestaurants} />
+                </TabsContent>
+
+                <TabsContent value="pending" className="space-y-4">
+                    <RestaurantsTable restaurants={pendingRestaurants} />
+                </TabsContent>
+            </Tabs>
         </div>
     );
 }
