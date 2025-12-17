@@ -6,7 +6,10 @@ import Link from "next/link";
 import { mockRestaurants } from "@/lib/mock-data";
 import { RestaurantOverview } from "@/components/dashboard/restaurants/RestaurantOverview";
 import { RestaurantMenu } from "@/components/dashboard/restaurants/RestaurantMenu";
-// Import other tab components as needed
+import { RestaurantStats } from "@/components/restaurants/RestaurantStats";
+import { RestaurantAnalytics } from "@/components/restaurants/RestaurantAnalytics";
+import { MenuVerification } from "@/components/restaurants/MenuVerification";
+import { DocumentApproval } from "@/components/restaurants/DocumentApproval";
 
 export default async function RestaurantDetailsPage({ params }: { params: { id: string } }) {
     const { id } = await params;
@@ -43,11 +46,11 @@ export default async function RestaurantDetailsPage({ params }: { params: { id: 
                     {restaurant.status === 'Pending' && (
                         <>
                             <Button variant="destructive">Reject</Button>
-                            <Button className="bg-green-600 hover:bg-green-700">Approve</Button>
+                            <Button className="bg-green-600 hover:bg-green-700 text-white">Approve</Button>
                         </>
                     )}
                     {restaurant.status === 'Active' && (
-                        <Button variant="outline">Suspend</Button>
+                        <Button variant="outline" className="text-red-600 border-red-200 hover:bg-red-50">Suspend</Button>
                     )}
                     <Button variant="secondary">
                         <ExternalLink className="mr-2 h-4 w-4" />
@@ -56,33 +59,38 @@ export default async function RestaurantDetailsPage({ params }: { params: { id: 
                 </div>
             </div>
 
-            <Tabs defaultValue="overview" className="space-y-4">
+            <RestaurantStats />
+
+            <Tabs defaultValue="menu" className="space-y-4">
                 <TabsList>
                     <TabsTrigger value="overview">Overview</TabsTrigger>
-                    <TabsTrigger value="menu">Menu</TabsTrigger>
-                    <TabsTrigger value="orders">Orders</TabsTrigger>
-                    <TabsTrigger value="financials">Financials</TabsTrigger>
+                    <TabsTrigger value="menu">Menu & Products</TabsTrigger>
+                    <TabsTrigger value="documents">Documents</TabsTrigger>
+                    <TabsTrigger value="analytics">Analytics</TabsTrigger>
                     <TabsTrigger value="settings">Settings</TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="overview">
+                <TabsContent value="overview" className="space-y-4">
                     <RestaurantOverview restaurant={restaurant} />
                 </TabsContent>
 
-                <TabsContent value="menu">
-                    <RestaurantMenu />
-                </TabsContent>
-
-                <TabsContent value="orders">
-                    <div className="p-4 border border-dashed rounded-lg text-center text-muted-foreground">
-                        Orders Filtered by Restaurant ID (Implementation similar to /orders)
+                <TabsContent value="menu" className="space-y-4">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div className="lg:col-span-2">
+                            <RestaurantMenu />
+                        </div>
+                        <div>
+                            <MenuVerification />
+                        </div>
                     </div>
                 </TabsContent>
 
-                <TabsContent value="financials">
-                    <div className="p-4 border border-dashed rounded-lg text-center text-muted-foreground">
-                        Payouts and Commission (Comming Soon)
-                    </div>
+                <TabsContent value="documents" className="space-y-4">
+                    <DocumentApproval />
+                </TabsContent>
+
+                <TabsContent value="analytics" className="space-y-4">
+                    <RestaurantAnalytics />
                 </TabsContent>
 
                 <TabsContent value="settings">
