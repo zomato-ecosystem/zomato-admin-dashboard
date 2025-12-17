@@ -1,147 +1,163 @@
 'use client';
 
-import { useState } from 'react';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
+import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, Search, Filter, Download } from "lucide-react";
-import { mockOrders } from '@/lib/mock-data';
-import Link from 'next/link';
+import { Search, Filter, Download, Trash2, Map, LayoutList } from "lucide-react";
+import { OrdersTable } from '@/components/orders/OrdersTable';
+import { OrdersFilterSidebar } from '@/components/orders/OrdersFilterSidebar';
+import { OrdersDetailModal } from '@/components/orders/OrderDetailModal';
+import { OrdersService, Order } from '@/services/ordersService';
+import dynamic from 'next/dynamic';
+import { Skeleton } from '@/components/ui/skeleton';
+
+const LiveOrdersMap = dynamic(() => import('@/components/dashboard/LiveOrdersMap').then(mod => mod.LiveOrdersMap), {
+    loading: () => <Skeleton className="h-[calc(100vh-200px)] w-full rounded-xl" />,
+    ssr: false // Maps usually shouldn't run on server
+});
 
 export default function OrdersPage() {
     const [searchTerm, setSearchTerm] = useState('');
+    const [orders, setOrders] = useState<Order[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [selectedOrderIds, setSelectedOrderIds] = useState<string[]>([]);
+    const [filterOpen, setFilterOpen] = useState(false);
+    const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+    const [isDetailOpen, setIsDetailOpen] = useState(false);
+    const [showMap, setShowMap] = useState(false);
 
-    const filteredOrders = mockOrders.filter(order =>
+    useEffect(() => {
+        const fetchOrders = async () => {
+            try {
+                const data = await OrdersService.getAllOrders();
+                setOrders(data);
+            } catch (error) {
+                console.error('Error fetching orders:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchOrders();
+    }, []);
+
+    const filteredOrders = orders.filter(order =>
         order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
         order.customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         order.restaurant.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const getStatusColor = (status: string) => {
-        switch (status) {
-            case 'Delivered': return 'success';
-            case 'Out for Delivery': return 'warning';
-            case 'Pending': return 'warning'; // Using warning for pending too for visibility
-            case 'Cancelled': return 'destructive';
-            default: return 'secondary';
+    const handleSelectOrder = (order: Order) => {
+        setSelectedOrder(order);
+        setIsDetailOpen(true);
+    };
+
+    const handleToggleSelect = (orderId: string) => {
+        if (selectedOrderIds.includes(orderId)) {
+            setSelectedOrderIds(prev => prev.filter(id => id !== orderId));
+        } else {
+            setSelectedOrderIds(prev => [...prev, orderId]);
+        }
+    };
+
+    const handleToggleSelectAll = (checked: boolean) => {
+        if (checked) {
+            setSelectedOrderIds(filteredOrders.map(o => o.id));
+        } else {
+            setSelectedOrderIds([]);
         }
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 max-w-[1600px] mx-auto">
+            {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">Orders</h2>
-                    <p className="text-muted-foreground">Manage and track all restaurant orders.</p>
+                    <h2 className="text-2xl font-bold tracking-tight text-gray-900">Orders Management</h2>
+                    <p className="text-gray-500 mt-1">
+                        Viewing {filteredOrders.length} orders
+                    </p>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
+                    <Button
+                        variant="outline"
+                        onClick={() => setShowMap(!showMap)}
+                        className={showMap ? 'bg-red-50 text-red-600 border-red-200' : ''}
+                    >
+                        {showMap ? <LayoutList className="mr-2 h-4 w-4" /> : <Map className="mr-2 h-4 w-4" />}
+                        {showMap ? 'List View' : 'Map View'}
+                    </Button>
                     <Button variant="outline">
                         <Download className="mr-2 h-4 w-4" />
                         Export
                     </Button>
-                    <Button>
+                    <Button
+                        onClick={() => setFilterOpen(true)}
+                        className={filterOpen ? 'bg-gray-100' : ''}
+                    >
                         <Filter className="mr-2 h-4 w-4" />
                         Filters
                     </Button>
                 </div>
             </div>
 
-            <div className="flex items-center py-4">
-                <div className="relative w-full max-w-sm">
-                    <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input
-                        placeholder="Search orders..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-8"
-                    />
+            {/* Content */}
+            {showMap ? (
+                <div className="border border-gray-200 rounded-xl overflow-hidden shadow-sm h-[calc(100vh-200px)]">
+                    <LiveOrdersMap />
                 </div>
-            </div>
+            ) : (
+                <>
+                    {/* Controls & Bulk Actions */}
+                    <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex items-center justify-between gap-4">
+                        <div className="relative flex-1 max-w-md">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                            <Input
+                                placeholder="Search by ID, customer, or restaurant..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="pl-10 bg-gray-50 border-gray-200 focus:bg-white transition-all"
+                            />
+                        </div>
 
-            <div className="rounded-md border bg-card">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Order ID</TableHead>
-                            <TableHead>Date</TableHead>
-                            <TableHead>Customer</TableHead>
-                            <TableHead>Restaurant</TableHead>
-                            <TableHead>Amount</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Delivery</TableHead>
-                            <TableHead className="text-right">Actions</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {filteredOrders.map((order) => (
-                            <TableRow key={order.id}>
-                                <TableCell className="font-medium">
-                                    <Link href={`/orders/${order.id}`} className="hover:underline text-primary">
-                                        {order.id}
-                                    </Link>
-                                </TableCell>
-                                <TableCell>{new Date(order.date).toLocaleDateString()}</TableCell>
-                                <TableCell>
-                                    <div className="flex flex-col">
-                                        <span className="font-medium">{order.customer.name}</span>
-                                        <span className="text-xs text-muted-foreground">{order.customer.phone}</span>
-                                    </div>
-                                </TableCell>
-                                <TableCell>{order.restaurant.name}</TableCell>
-                                <TableCell>₹{order.amount}</TableCell>
-                                <TableCell>
-                                    <Badge variant={getStatusColor(order.status) as any}>{order.status}</Badge>
-                                </TableCell>
-                                <TableCell>
-                                    {order.deliveryPartner ? (
-                                        <div className="flex flex-col">
-                                            <span className="text-sm">{order.deliveryPartner.name}</span>
-                                            <span className="text-xs text-muted-foreground">{order.deliveryPartner.status}</span>
-                                        </div>
-                                    ) : (
-                                        <span className="text-xs text-muted-foreground italic">Unassigned</span>
-                                    )}
-                                </TableCell>
-                                <TableCell className="text-right">
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                                <span className="sr-only">Open menu</span>
-                                                <MoreHorizontal className="h-4 w-4" />
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end">
-                                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                            <DropdownMenuItem>
-                                                <Link href={`/orders/${order.id}`} className="w-full">View Details</Link>
-                                            </DropdownMenuItem>
-                                            <DropdownMenuSeparator />
-                                            <DropdownMenuItem>Assign Driver</DropdownMenuItem>
-                                            <DropdownMenuItem className="text-destructive">Cancel Order</DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </div>
+                        {selectedOrderIds.length > 0 && (
+                            <div className="flex items-center gap-3 animate-in fade-in slide-in-from-right-4 duration-300">
+                                <span className="text-sm font-medium text-gray-700">
+                                    {selectedOrderIds.length} selected
+                                </span>
+                                <Button variant="destructive" size="sm">
+                                    <Trash2 className="mr-2 h-3 w-3" />
+                                    Cancel Selected
+                                </Button>
+                                <Button variant="secondary" size="sm">
+                                    Assign Driver
+                                </Button>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Table */}
+                    <OrdersTable
+                        orders={filteredOrders}
+                        onSelectOrder={handleSelectOrder}
+                        selectedOrderIds={selectedOrderIds}
+                        onToggleSelect={handleToggleSelect}
+                        onToggleSelectAll={handleToggleSelectAll}
+                    />
+                </>
+            )}
+
+            {/* Overlays */}
+            <OrdersFilterSidebar
+                isOpen={filterOpen}
+                onClose={() => setFilterOpen(false)}
+            />
+
+            <OrderDetailModal
+                order={selectedOrder}
+                isOpen={isDetailOpen}
+                onClose={() => setIsDetailOpen(false)}
+            />
         </div>
     );
 }
