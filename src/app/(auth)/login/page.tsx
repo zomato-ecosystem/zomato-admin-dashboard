@@ -36,11 +36,12 @@ export default function AdminLoginPage() {
             {/* Background Pattern */}
             <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
 
+            {/* @ts-ignore */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="w-full max-w-md relative z-10"
+                className="w-full max-w-md space-y-8 bg-white p-8 rounded-2xl shadow-xl relative z-10"
             >
                 {/* Card */}
                 <div className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
