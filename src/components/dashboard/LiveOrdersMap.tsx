@@ -129,7 +129,7 @@ export function LiveOrdersMap() {
                 longitude={city.longitude}
                 latitude={city.latitude}
                 anchor="bottom"
-                onClick={e => {
+                onClick={(e: any) => {
                     e.originalEvent.stopPropagation();
                     setPopupInfo(city);
                 }}
@@ -148,7 +148,7 @@ export function LiveOrdersMap() {
         <div className="relative w-full h-[600px] rounded-xl overflow-hidden border border-gray-200">
             <Map
                 {...viewState}
-                onMove={evt => setViewState(evt.viewState)}
+                onMove={(evt: any) => setViewState(evt.viewState)}
                 style={{ width: '100%', height: '100%' }}
                 mapStyle="mapbox://styles/mapbox/light-v11"
                 mapboxAccessToken={MAPBOX_TOKEN}
@@ -235,8 +235,8 @@ export function LiveOrdersMap() {
                     <button
                         onClick={() => setShowHeatmap(!showHeatmap)}
                         className={`w-full flex items-center justify-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${showHeatmap
-                                ? 'bg-red-100 text-red-700'
-                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            ? 'bg-red-100 text-red-700'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                             }`}
                     >
                         <Thermometer className="w-4 h-4" />
