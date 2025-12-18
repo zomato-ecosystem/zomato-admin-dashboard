@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ordersService, OrderFilters } from '@/services/ordersService';
+import { OrdersService, OrderFilters } from '@/services/ordersService';
 import { mockOrders } from '@/lib/mock-data';
 
 // For demo: return mock data if API fails
@@ -10,8 +10,8 @@ export function useOrders(filters: OrderFilters = {}) {
         queryKey: ['orders', filters],
         queryFn: async () => {
             if (useMockFallback) return { data: mockOrders };
-            const response = await ordersService.getOrders(filters);
-            return response.data;
+            const response = await OrdersService.getOrders(filters);
+            return response;
         },
         refetchInterval: 10000, // Auto-refetch every 10 seconds
     });
@@ -22,8 +22,8 @@ export function useOrderById(id: string) {
         queryKey: ['order', id],
         queryFn: async () => {
             if (useMockFallback) return { data: mockOrders.find(o => o.id === id) };
-            const response = await ordersService.getOrderById(id);
-            return response.data;
+            const response = await OrdersService.getOrderById(id);
+            return response;
         },
         enabled: !!id,
     });
@@ -33,7 +33,7 @@ export function useAssignOrder() {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ orderId, partnerId }: { orderId: string; partnerId: string }) =>
-            ordersService.assignOrder(orderId, partnerId),
+            OrdersService.assignOrder(orderId, partnerId),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['orders'] });
         },
@@ -44,7 +44,7 @@ export function useCancelOrder() {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ orderId, reason }: { orderId: string; reason: string }) =>
-            ordersService.cancelOrder(orderId, reason),
+            OrdersService.cancelOrder(orderId, reason),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['orders'] });
         },
@@ -55,7 +55,7 @@ export function useRefundOrder() {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ orderId, amount, reason }: { orderId: string; amount: number; reason: string }) =>
-            ordersService.refundOrder(orderId, amount, reason),
+            OrdersService.refundOrder(orderId, amount, reason),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['orders'] });
         },
