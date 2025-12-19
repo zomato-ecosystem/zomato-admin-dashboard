@@ -7,9 +7,6 @@ import {
     Phone,
     User,
     Store,
-    Clock,
-    CreditCard,
-    ChefHat,
     Bike
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
