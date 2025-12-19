@@ -2,8 +2,7 @@
 
 import {
     X,
-    Filter,
-    Calendar as CalendarIcon
+    Filter
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
