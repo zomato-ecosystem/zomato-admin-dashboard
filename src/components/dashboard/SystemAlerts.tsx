@@ -1,4 +1,4 @@
-import { AlertTriangle, XCircle, CheckCircle } from "lucide-react";
+import { AlertTriangle, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export function SystemAlerts() {
@@ -12,7 +12,7 @@ export function SystemAlerts() {
                 </AlertDescription>
             </Alert>
             <Alert>
-                <XCircle className="h-4 w-4 text-orange-500" />
+                <AlertCircle className="h-4 w-4 text-orange-500" />
                 <AlertTitle>Payment Gateway</AlertTitle>
                 <AlertDescription>
                     3 failed transactions detected in the last 10 mins.
