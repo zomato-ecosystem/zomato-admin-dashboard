@@ -1,6 +1,6 @@
 'use client';
 
-import { Bell, Command, Search, Shield } from "lucide-react"
+import { Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
@@ -10,11 +10,7 @@ import { NotificationCenter } from "@/components/common/NotificationCenter"
 import { MobileSidebar } from "@/components/layout/MobileSidebar"
 import { ModeToggle } from "@/components/mode-toggle"
 
-interface HeaderProps {
-    onMenuClick: () => void;
-}
-
-export function Header({ onMenuClick }: HeaderProps) {
+export function Header() {
     const router = useRouter()
 
     return (
