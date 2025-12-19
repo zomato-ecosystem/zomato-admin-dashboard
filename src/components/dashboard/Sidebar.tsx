@@ -14,17 +14,9 @@ import {
     Settings,
     Map,
     Ticket,
-    MapPin,
     LogOut,
     ChevronDown,
     ChevronRight,
-    Shield,
-    UserCheck,
-    Plus,
-    FileText,
-    CreditCard,
-    RotateCcw,
-    Banknote
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
