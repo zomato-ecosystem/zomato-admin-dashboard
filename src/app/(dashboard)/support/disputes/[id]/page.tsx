@@ -4,7 +4,6 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, FileText, CheckCircle, XCircle } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 
 export default function DisputeDetailPage({ params }: { params: { id: string } }) {
     return (
