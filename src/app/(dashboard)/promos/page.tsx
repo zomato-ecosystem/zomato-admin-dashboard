@@ -8,53 +8,53 @@ import { mockPromos } from "@/lib/mock-data";
 import { Search, Plus, Ticket, Percent } from "lucide-react";
 import Link from "next/link";
 
+const PromoTable = ({ promos }: { promos: typeof mockPromos }) => (
+    <Table>
+        <TableHeader>
+            <TableRow>
+                <TableHead>Code</TableHead>
+                <TableHead>Description</TableHead>
+                <TableHead>Type</TableHead>
+                <TableHead>Discount</TableHead>
+                <TableHead>Min Order</TableHead>
+                <TableHead>Usage</TableHead>
+                <TableHead>Valid Until</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+            </TableRow>
+        </TableHeader>
+        <TableBody>
+            {promos.map((promo) => (
+                <TableRow key={promo.id}>
+                    <TableCell className="font-mono font-medium">{promo.code}</TableCell>
+                    <TableCell>{promo.description}</TableCell>
+                    <TableCell>{promo.type}</TableCell>
+                    <TableCell>
+                        {promo.type === "Percentage" ? `${promo.discountValue}%` : promo.type === "Flat" ? `₹${promo.discountValue}` : "N/A"}
+                    </TableCell>
+                    <TableCell>₹{promo.minOrderValue}</TableCell>
+                    <TableCell>{promo.usedCount}/{promo.usageLimit}</TableCell>
+                    <TableCell>{new Date(promo.validUntil).toLocaleDateString()}</TableCell>
+                    <TableCell>
+                        <Badge variant={promo.status === "Active" ? "default" : promo.status === "Scheduled" ? "secondary" : "outline"}>
+                            {promo.status}
+                        </Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                        <Button variant="ghost" size="sm" asChild>
+                            <Link href={`/promos/${promo.id}`}>View</Link>
+                        </Button>
+                    </TableCell>
+                </TableRow>
+            ))}
+        </TableBody>
+    </Table>
+);
+
 export default function PromosPage() {
     const activePromos = mockPromos.filter(p => p.status === "Active");
     const scheduledPromos = mockPromos.filter(p => p.status === "Scheduled");
     const expiredPromos = mockPromos.filter(p => p.status === "Expired");
-
-    const PromoTable = ({ promos }: { promos: typeof mockPromos }) => (
-        <Table>
-            <TableHeader>
-                <TableRow>
-                    <TableHead>Code</TableHead>
-                    <TableHead>Description</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Discount</TableHead>
-                    <TableHead>Min Order</TableHead>
-                    <TableHead>Usage</TableHead>
-                    <TableHead>Valid Until</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {promos.map((promo) => (
-                    <TableRow key={promo.id}>
-                        <TableCell className="font-mono font-medium">{promo.code}</TableCell>
-                        <TableCell>{promo.description}</TableCell>
-                        <TableCell>{promo.type}</TableCell>
-                        <TableCell>
-                            {promo.type === "Percentage" ? `${promo.discountValue}%` : promo.type === "Flat" ? `₹${promo.discountValue}` : "N/A"}
-                        </TableCell>
-                        <TableCell>₹{promo.minOrderValue}</TableCell>
-                        <TableCell>{promo.usedCount}/{promo.usageLimit}</TableCell>
-                        <TableCell>{new Date(promo.validUntil).toLocaleDateString()}</TableCell>
-                        <TableCell>
-                            <Badge variant={promo.status === "Active" ? "default" : promo.status === "Scheduled" ? "secondary" : "outline"}>
-                                {promo.status}
-                            </Badge>
-                        </TableCell>
-                        <TableCell className="text-right">
-                            <Button variant="ghost" size="sm" asChild>
-                                <Link href={`/promos/${promo.id}`}>View</Link>
-                            </Button>
-                        </TableCell>
-                    </TableRow>
-                ))}
-            </TableBody>
-        </Table>
-    );
 
     return (
         <div className="space-y-6">
