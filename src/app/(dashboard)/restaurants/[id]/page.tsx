@@ -35,7 +35,7 @@ export default async function RestaurantDetailsPage({ params }: { params: { id: 
                 <div className="flex-1">
                     <div className="flex items-center gap-2">
                         <h2 className="text-3xl font-bold tracking-tight">{restaurant.name}</h2>
-                        <Badge variant={getStatusVariant(restaurant.status) as any}>{restaurant.status}</Badge>
+                        <Badge variant={getStatusVariant(restaurant.status) as "default" | "secondary" | "destructive" | "outline" | null | undefined}>{restaurant.status}</Badge>
                     </div>
                     <div className="flex items-center gap-2 text-muted-foreground mt-1">
                         <MapPin className="h-4 w-4" />
