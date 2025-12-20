@@ -42,7 +42,7 @@ export default function RefundsPage() {
                                 <TableCell>₹{refund.amount}</TableCell>
                                 <TableCell>{refund.reason}</TableCell>
                                 <TableCell>
-                                    <Badge variant={refund.status === 'Processed' ? 'success' : 'warning' as any}>{refund.status}</Badge>
+                                    <Badge variant={refund.status === 'Processed' ? 'default' : 'secondary'}>{refund.status}</Badge>
                                 </TableCell>
                                 <TableCell className="text-right">
                                     {refund.status === 'Pending' ? (
