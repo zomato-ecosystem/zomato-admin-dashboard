@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
@@ -35,7 +35,7 @@ export default function TicketDetailPage({ params }: { params: { id: string } })
                             <div className="flex flex-col space-y-2">
                                 <div className="bg-muted p-3 rounded-lg max-w-[80%] self-start">
                                     <p className="text-sm font-medium">Rahul Gupta (Customer)</p>
-                                    <p className="text-sm">My order ORD-001 has not been delivered yet. It's been 2 hours.</p>
+                                    <p className="text-sm">My order ORD-001 has not been delivered yet. It&apos;s been 2 hours.</p>
                                     <span className="text-xs text-muted-foreground">10:00 AM</span>
                                 </div>
                                 <div className="bg-primary text-primary-foreground p-3 rounded-lg max-w-[80%] self-end">
