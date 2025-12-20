@@ -50,7 +50,7 @@ export default function PayoutsPage() {
                                         <TableCell>{payout.period}</TableCell>
                                         <TableCell>₹{payout.amount.toLocaleString()}</TableCell>
                                         <TableCell>
-                                            <Badge variant={payout.status === 'Processed' ? 'success' : 'warning' as any}>{payout.status}</Badge>
+                                            <Badge variant={payout.status === 'Processed' ? 'default' : 'secondary'}>{payout.status}</Badge>
                                         </TableCell>
                                         <TableCell className="text-right">
                                             {payout.status === 'Pending' ? (
