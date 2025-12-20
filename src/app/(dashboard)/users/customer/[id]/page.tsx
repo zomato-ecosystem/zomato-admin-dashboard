@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Mail, Phone, MapPin, ShoppingBag } from "lucide-react";
+import { ArrowLeft, Mail, Phone, MapPin } from "lucide-react";
 import Link from "next/link";
 import { mockCustomers } from "@/lib/mock-data";
 
@@ -21,7 +21,7 @@ export default async function CustomerDetailPage({ params }: { params: { id: str
                 <div className="flex-1">
                     <div className="flex items-center gap-2">
                         <h2 className="text-3xl font-bold tracking-tight">{customer.name}</h2>
-                        <Badge variant={customer.status === 'Active' ? 'success' : 'destructive' as any}>{customer.status}</Badge>
+                        <Badge variant={customer.status === 'Active' ? 'default' : 'destructive'}>{customer.status}</Badge>
                     </div>
                 </div>
                 <Button variant="outline">Reset Password</Button>
