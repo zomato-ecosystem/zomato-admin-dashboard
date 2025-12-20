@@ -22,7 +22,7 @@ export default async function DeliveryPartnerDetailPage({ params }: { params: { 
                     <div className="flex items-center gap-2">
                         <h2 className="text-3xl font-bold tracking-tight">{partner.name}</h2>
                         <Badge variant="outline" className="border-primary text-primary">{partner.currentZone}</Badge>
-                        <Badge variant={partner.status === 'Active' ? 'success' : 'warning' as any}>{partner.status}</Badge>
+                        <Badge variant={partner.status === 'Active' ? 'default' : 'secondary'}>{partner.status}</Badge>
                     </div>
                 </div>
                 {partner.verificationStatus === 'Pending Documents' && (
