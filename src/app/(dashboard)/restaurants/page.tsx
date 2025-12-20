@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { MoreHorizontal, Search, PlusCircle, Filter } from "lucide-react";
+import { Search, PlusCircle, Filter } from "lucide-react";
 import { mockRestaurants } from '@/lib/mock-data';
 import Link from 'next/link';
 import { RestaurantsTable } from '@/components/restaurants/RestaurantsTable';
