@@ -9,7 +9,6 @@ import {
     TableRow
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { mockTransactions } from '@/lib/mock-data';
@@ -51,7 +50,7 @@ export default function TransactionsPage() {
                                 <TableCell>₹{txn.amount}</TableCell>
                                 <TableCell>{txn.paymentMethod}</TableCell>
                                 <TableCell>
-                                    <Badge variant={txn.status === 'Success' ? 'success' : txn.status === 'Refunded' ? 'secondary' : 'warning' as any}>{txn.status}</Badge>
+                                    <Badge variant={(txn.status === 'Success' ? 'default' : txn.status === 'Refunded' ? 'secondary' : 'outline') as "default" | "secondary" | "destructive" | "outline"}>{txn.status}</Badge>
                                 </TableCell>
                                 <TableCell>{new Date(txn.date).toLocaleDateString()}</TableCell>
                             </TableRow>
