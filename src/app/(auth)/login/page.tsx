@@ -1,10 +1,12 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
-import { motion } from 'framer-motion';
 import { Eye, EyeOff, Lock, Mail, Shield } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 import { TwoFactorAuthModal } from '../../../components/auth/TwoFactorAuthModal';
+
+export const dynamic = 'force-dynamic';
 
 export default function AdminLoginPage() {
     const router = useRouter();
@@ -13,9 +15,6 @@ export default function AdminLoginPage() {
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [show2FA, setShow2FA] = useState(false);
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const MDiv = motion.div as any;
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
@@ -28,26 +27,23 @@ export default function AdminLoginPage() {
     };
 
     const handleVerify2FA = (otp: string) => {
-        // Simulate OTP verification
+        console.log('Verifying OTP:', otp);
         if (otp.length === 6) {
+            console.log('OTP valid, setting cookie and redirecting to dashboard...');
+            // Set a dummy token for the simulation
+            Cookies.set('admin_token', 'simulated_token_admin', { expires: 1 });
             router.push('/dashboard');
+        } else {
+            console.warn('Invalid OTP length:', otp.length);
         }
     };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-orange-50 flex items-center justify-center p-4">
-            {/* Background Pattern */}
             <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
 
-            <MDiv
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="w-full max-w-md space-y-8 bg-white p-8 rounded-2xl shadow-xl relative z-10"
-            >
-                {/* Card */}
+            <div className="w-full max-w-md space-y-8 bg-white p-8 rounded-2xl shadow-xl relative z-10">
                 <div className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
-                    {/* Logo */}
                     <div className="text-center mb-8">
                         <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl mb-4">
                             <Shield className="w-8 h-8 text-white" />
@@ -56,9 +52,7 @@ export default function AdminLoginPage() {
                         <p className="text-sm text-gray-600 mt-1">Sign in to your account</p>
                     </div>
 
-                    {/* Form */}
                     <form onSubmit={handleSubmit} className="space-y-6">
-                        {/* Email Input */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                 Email Address
@@ -78,7 +72,6 @@ export default function AdminLoginPage() {
                             </div>
                         </div>
 
-                        {/* Password Input */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                 Password
@@ -109,7 +102,6 @@ export default function AdminLoginPage() {
                             </div>
                         </div>
 
-                        {/* Remember Me & Forgot Password */}
                         <div className="flex items-center justify-between">
                             <label className="flex items-center">
                                 <input
@@ -123,7 +115,6 @@ export default function AdminLoginPage() {
                             </a>
                         </div>
 
-                        {/* Submit Button */}
                         <button
                             type="submit"
                             disabled={loading}
@@ -140,7 +131,6 @@ export default function AdminLoginPage() {
                         </button>
                     </form>
 
-                    {/* Security Note */}
                     <div className="mt-6 p-3 bg-blue-50 rounded-lg border border-blue-100">
                         <div className="flex items-start">
                             <Shield className="w-5 h-5 text-blue-500 mt-0.5 mr-2 flex-shrink-0" />
@@ -151,11 +141,10 @@ export default function AdminLoginPage() {
                     </div>
                 </div>
 
-                {/* Footer */}
                 <p className="text-center text-sm text-gray-600 mt-6">
                     © 2024 Zomato. All rights reserved.
                 </p>
-            </MDiv>
+            </div>
 
             <TwoFactorAuthModal
                 isOpen={show2FA}
